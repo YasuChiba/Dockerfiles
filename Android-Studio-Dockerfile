@@ -3,14 +3,13 @@
 # -v /tmp/.X11-unix:/tmp/.X11-unix 
 # -e DISPLAY=${DISPLAY}
 
+# run android studio by 'android-studio'
+
 FROM ubuntu:20.04
 
 RUN apt update
 RUN apt install -y vim git sudo
-
-RUN apt install -y wget libxtst6 libxi6
-RUN wget -P /tmp https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2020.3.1.26/android-studio-2020.3.1.26-linux.tar.gz
-RUN tar xzvf /tmp/android-studio-2020.3.1.26-linux.tar.gz -C /opt
+RUN apt install -y x11-apps
 
 ARG USERNAME=user
 ARG GROUPNAME=user
@@ -24,3 +23,9 @@ RUN groupadd -g $GID $GROUPNAME && \
 USER $USERNAME
 WORKDIR /home/$USERNAME/
 
+
+# install android-studio
+RUN sudo apt install -y wget libxtst6 libxi6
+RUN sudo wget -P /tmp https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2020.3.1.26/android-studio-2020.3.1.26-linux.tar.gz
+RUN sudo tar xzvf /tmp/android-studio-2020.3.1.26-linux.tar.gz -C /opt
+RUN sudo ln -s /opt/android-studio/bin/studio.sh /usr/local/bin/android-studio

@@ -1,0 +1,26 @@
+# need these options
+# --gpu=all option
+# -v /tmp/.X11-unix:/tmp/.X11-unix 
+# -e DISPLAY=${DISPLAY}
+
+FROM ubuntu:20.04
+
+RUN apt update
+RUN apt install -y vim git sudo
+
+RUN apt install -y wget libxtst6 libxi6
+RUN wget -P /tmp https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2020.3.1.26/android-studio-2020.3.1.26-linux.tar.gz
+RUN tar xzvf /tmp/android-studio-2020.3.1.26-linux.tar.gz -C /opt
+
+ARG USERNAME=user
+ARG GROUPNAME=user
+ARG UID=1000
+ARG GID=1000
+ARG PASSWORD=user
+RUN groupadd -g $GID $GROUPNAME && \
+    useradd -m -s /bin/bash -u $UID -g $GID -G sudo $USERNAME && \
+    echo $USERNAME:$PASSWORD | chpasswd && \
+    echo "$USERNAME   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+USER $USERNAME
+WORKDIR /home/$USERNAME/
+
